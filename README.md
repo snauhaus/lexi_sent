@@ -8,7 +8,18 @@ Run from command line
 
     # Example call
 		cd /path/to/lexi_sent/
-		python3 lexi_sent.py test.csv
+		python3 lexi_sent.py test.csv 
+
+The input should be a CSV file with a single unnamed column, containing a document per row (see test.csv). 
+
+To see the program help 
+
+		python3 lexi_sent.py --help 
+		
+Additional arguments: 
+
+ - `-o` to specify a custom output file (defaults to 'Sentiments.csv')
+ - `-w` to specify a custom wordlist. Defaults to 'MPQA.csv'. Custom wordlists need to be in the same format as the default wordlist. 
 
 ## FAQ
 
