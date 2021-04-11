@@ -12,7 +12,7 @@ Run from command line
 
 The input should be a CSV file with a single unnamed column, containing a document per row (see test.csv). 
 
-To see the program help 
+To see the program help:
 
 		python3 lexi_sent.py --help 
 		
@@ -28,7 +28,7 @@ Additional arguments:
 If you're getting the error "ImportError: No module named ...", install the missing package(s):
 
     # Run the following command to install dependencies
-		pip3 pandas numpy
+		pip3 install pandas numpy
 		
 ### How to install Python?
 
