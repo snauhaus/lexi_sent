@@ -2,12 +2,9 @@
 """
 
 """
-import nltk
 import pandas as pd
 import numpy as np
 import argparse
-import progressbar
-import sys, os
 
 
 def janis_fadner(pos, neg):
