@@ -114,20 +114,16 @@ def main():
     parser = argparse.ArgumentParser(description='Perform sentiment analysis on a list of documents.')
     parser.add_argument('input', type=str, nargs=1, help='A CSV file with a single column, containing the text to one document per row') #
     group = parser.add_mutually_exclusive_group(required=False)
-    group.add_argument('-w','--wordlist', help='CSV file containing a word list with positive and negative words. Default is the MPQA word list, which ships with this script. Different files must follow the same format.', required=False, nargs=1) #
-    group.add_argument('-o','--output', help='Name for output file. Defaults to "Sentiments.csv"', required=False, nargs=1) #
+    group.add_argument('-w','--wordlist', help='CSV file containing a word list with positive and negative words. Default is the MPQA word list, which ships with this script. Different files must follow the same format.', required=False, nargs=1, default="MPQA.csv") #
+    group.add_argument('-o','--output', help='Name for output file. Defaults to "Sentiments.csv"', required=False, nargs=1, default='Sentiments.csv') #
    
     # Parse arguments
     args = vars(parser.parse_args())
     input_arg = args['input'][0]
     if args['wordlist'] is not None:
         wordlist_file = args['wordlist'][0]
-    else:
-        wordlist_file = "MPQA.csv"
     if args['output'] is not None:
         output_file = args['output'][0]
-    else:
-        output_file = 'Sentiments.csv'
     
     # Import text data
     if input_arg.split(".")[-1]=="csv": # Check if input is csv file
