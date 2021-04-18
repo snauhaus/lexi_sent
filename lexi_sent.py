@@ -5,7 +5,10 @@
 import pandas as pd
 import numpy as np
 import argparse
-
+import os
+import re # Regex
+import nltk
+import io # Handles encoding of text files
 
 def janis_fadner(pos, neg):
     """Returns Fanis-Fadner Coefficient of Imbalance"""
@@ -22,7 +25,7 @@ def janis_fadner(pos, neg):
 
 def word_counter(words, text):
     """Vectorized string search"""
-    total = [0]*len(text)
+    total = [0]*len(text) # Empty list
     for i, txt in enumerate(text):
         for word in words:
             if word in txt:
@@ -30,24 +33,79 @@ def word_counter(words, text):
     return total
 
 
-def sentiment_analysis(wordlist_file, csv_file):
-    """Sentiment analysis routine"""
-    
+def sentiment_analysis(df, wordlist):
+    """Sentiment analysis routine using janis fadner coefficient of imbalance"""
+
     # Get wordlist
-    wordlist = pd.read_csv(wordlist_file)
     pos_words = wordlist[wordlist['sentiment'] > 0]['token'].to_list()
     neg_words = wordlist[wordlist['sentiment'] < 0]['token'].to_list()
-    
-    # Get input text
-    df = pd.read_csv(csv_file, names=["Text"], encoding='latin1')
-    
+        
     # Calculate sentiment
-    df['pos_words'] = word_counter(pos_words, df['Text'])
-    df['neg_words'] = word_counter(neg_words, df['Text'])
-    df['Sentiment'] = janis_fadner(df['pos_words'], df['neg_words'])
+    df['PositiveWords'] = word_counter(pos_words, df['Text'])
+    df['NegativeWords'] = word_counter(neg_words, df['Text'])
+    df['Sentiment'] = janis_fadner(df['PositiveWords'], df['NegativeWords'])
     
-    df = df[['Text', 'Sentiment']]
+    return df
+
+
+def clean_doc(doc):
+    """Cleans a document, extracts meta data, returns a dictionary"""
     
+    # Split header and text
+    topmarker = "Body"
+    if re.search("\n" + topmarker + ".?\n", doc) is not None:
+        headersplit = re.split("\n" + topmarker + ".?\n", doc)
+        header = headersplit[0]
+        body = headersplit[1]
+        cleaned = 1
+    else:
+        body = doc
+        header = ''
+        cleaned = 0
+    
+    # Try getting the date
+    try:
+        dateresult = re.findall(r'\n\s{5}.*\d+.*\d{4}\s', header, flags=re.IGNORECASE)
+        if header:
+            dateresult += re.findall(r'\w+\s\d+.*\d{4}', header)
+            dateresult += re.findall(r'\w+\s*\d{4}', header)
+        date = dateresult[0].strip()
+    except:
+        date = ''
+    
+    # Clean text body
+    words = nltk.word_tokenize(body) # Tokenize words
+    words = [w.lower() for w in words] # Lowercase everything
+    words = list(set(words)) # Unique words only
+    words = [w for w in words if w.isalpha()] # Letters only
+    text = ' '.join(words)
+    
+    # Collect results
+    cleaned_doc = { 
+        'Text': text,
+        'Date': date
+    }
+    
+    return cleaned_doc
+
+
+def folder_import(path):
+    """Function imports each document in path, cleans it, and appends to a data frame"""
+    files = os.listdir(path)
+    # Text files only
+    files = [f for f in files if f.split(".")[-1]=="txt"]
+    # Results table
+    df = pd.DataFrame()
+    # Loop through files in folder
+    for i, f in enumerate(files):
+        # Read file
+        fp = io.open(os.path.join(path, f), 'r', encoding='windows-1252').read()
+        # Clean file
+        fp_clean = clean_doc(fp)
+        # Add file name to results
+        fp_clean['File'] = f
+        # Append results to dataframe
+        df = df.append(fp_clean, ignore_index=True)
     return df
     
 
@@ -61,7 +119,7 @@ def main():
    
     # Parse arguments
     args = vars(parser.parse_args())
-    csv_file = args['input'][0]
+    input_arg = args['input'][0]
     if args['wordlist'] is not None:
         wordlist_file = args['wordlist'][0]
     else:
@@ -70,9 +128,22 @@ def main():
         output_file = args['output'][0]
     else:
         output_file = 'Sentiments.csv'
+    
+    # Import text data
+    if input_arg.split(".")[-1]=="csv": # Check if input is csv file
+        # if true, import csv
+        text_data = pd.read_csv(input_arg, names=["Text"], encoding='latin1')
+    elif os.path.isdir(input_arg): # Check if input is a folder
+        # if false, run the folder import
+        text_data = folder_import(input_arg)
+    else:
+        raise ValueError("input should be path to a folder or csv file")
         
+    # Import wordlist
+    wordlist = pd.read_csv(wordlist_file)
+    
     # Sentiment analysis
-    results = sentiment_analysis(wordlist_file, csv_file)
+    results = sentiment_analysis(text_data, wordlist)
     
     # Export results
     results.to_csv(output_file, index=False)

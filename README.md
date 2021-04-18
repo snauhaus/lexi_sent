@@ -1,22 +1,28 @@
 # lexi_sent
 
-A python3 script for lexicon-based sentiment analysis
+A python3 script for lexicon-based sentiment analysis.
 
 ## Usage
 
-Run from command line 
+The program can be run from the command line. Input can be a csv file or a folder. 
 
-    # Example call
+To see the program help:
+
+		python3 lexi_sent.py --help 
+
+For CSV import, run the following commands:
+
 		cd /path/to/lexi_sent/
 		python3 lexi_sent.py test.csv 
 
 The input should be a CSV file with a single unnamed column, containing a document per row (see test.csv). 
 
-To see the program help:
+The folder import expects the input to be a folder. Only `txt` files can be imported. Example call:
 
-		python3 lexi_sent.py --help 
+		cd /path/to/lexi_sent/
+		python3 lexi_sent.py test
 		
-Additional arguments: 
+Optional arguments: 
 
  - `-o` to specify a custom output file (defaults to 'Sentiments.csv')
  - `-w` to specify a custom wordlist. Defaults to 'MPQA.csv'. Custom wordlists need to be in the same format as the default wordlist. 
