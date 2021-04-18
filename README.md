@@ -4,7 +4,7 @@ A python3 script for lexicon-based sentiment analysis.
 
 ## Usage
 
-The program can be run from the command line. Input can be a csv file or a folder. 
+The program runs from the command line. Input can be a csv file or a folder. 
 
 To see the program help:
 
