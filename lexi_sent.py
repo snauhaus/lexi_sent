@@ -127,10 +127,8 @@ def main():
     
     # Import text data
     if input_arg.split(".")[-1]=="csv": # Check if input is csv file
-        # if true, import csv
         text_data = pd.read_csv(input_arg, names=["Text"], encoding='latin1')
     elif os.path.isdir(input_arg): # Check if input is a folder
-        # if false, run the folder import
         text_data = folder_import(input_arg)
     else:
         raise ValueError("input should be path to a folder or csv file")
