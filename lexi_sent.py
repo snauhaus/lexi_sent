@@ -124,6 +124,12 @@ def main():
         wordlist_file = args['wordlist']
     if args['output'] is not None:
         output_file = args['output']
+        
+    # Download nltk's punkt if missing
+    try:
+        nltk.data.find('tokenizers/punkt')
+    except LookupError:
+        nltk.download('punkt')
     
     # Import text data
     if input_arg.split(".")[-1]=="csv": # Check if input is csv file
