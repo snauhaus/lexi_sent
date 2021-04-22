@@ -7,7 +7,7 @@ import numpy as np
 import argparse
 import os
 import re # Regex
-import nltk
+# import nltk
 import io # Handles encoding of text files
 
 def janis_fadner(pos, neg):
@@ -74,7 +74,8 @@ def clean_doc(doc):
         date = ''
     
     # Clean text body
-    words = nltk.word_tokenize(body) # Tokenize words
+    # words = nltk.word_tokenize(body) # Tokenize words
+    words = body.split()
     words = [w.lower() for w in words] # Lowercase everything
     words = list(set(words)) # Unique words only
     words = [w for w in words if w.isalpha()] # Letters only
@@ -126,10 +127,10 @@ def main():
         output_file = args['output']
         
     # Download nltk's punkt if missing
-    try:
-        nltk.data.find('tokenizers/punkt')
-    except LookupError:
-        nltk.download('punkt')
+    # try:
+    #     nltk.data.find('tokenizers/punkt')
+    # except LookupError:
+    #     nltk.download('punkt')
     
     # Import text data
     if input_arg.split(".")[-1]=="csv": # Check if input is csv file

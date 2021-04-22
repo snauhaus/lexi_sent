@@ -12,14 +12,12 @@ To see the program help:
 
 For CSV import, run the following commands:
 
-		cd /path/to/lexi_sent/
 		python3 lexi_sent.py test.csv 
 
 The input should be a CSV file with a single unnamed column, containing a document per row (see test.csv). 
 
 The folder import expects the input to be a folder. Only `txt` files can be imported. Example call:
 
-		cd /path/to/lexi_sent/
 		python3 lexi_sent.py test
 		
 Optional arguments: 
