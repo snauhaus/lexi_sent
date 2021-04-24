@@ -116,7 +116,7 @@ def main():
     parser.add_argument('input', type=str, nargs=1, help='A CSV file with a single column, containing the text to one document per row') #
     group = parser.add_mutually_exclusive_group(required=False)
     group.add_argument('-w','--wordlist', help='CSV file containing a word list with positive and negative words. Default is the MPQA word list, which ships with this script. Different files must follow the same format.', required=False, nargs=1, default='MPQA.csv') #
-    group.add_argument('-o','--output', help='Name for output file. Defaults to "Sentiments.csv"', required=False, nargs=1, default='Sentiments.csv') #
+    group.add_argument('-o','--output', help='Name for output file. Defaults to "Sentiments.xslx"', required=False, nargs=1, default='Sentiments.xlsx') #
    
     # Parse arguments
     args = vars(parser.parse_args())
@@ -147,7 +147,7 @@ def main():
     results = sentiment_analysis(text_data, wordlist)
     
     # Export results
-    results.to_csv(output_file, index=False)
+    results.to_excel(output_file, index=False)
 
 
 if __name__ == '__main__':

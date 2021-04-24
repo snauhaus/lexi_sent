@@ -32,7 +32,7 @@ Optional arguments:
 If you're getting the error "ImportError: No module named ...", install the missing package(s):
 
     # Run the following command to install dependencies
-		pip3 install pandas numpy
+		pip3 install pandas numpy openpyxl
 		
 ### How to install Python?
 
