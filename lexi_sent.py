@@ -8,6 +8,7 @@ import argparse
 import os
 import re # Regex
 # import nltk
+import string
 import io # Handles encoding of text files
 
 def janis_fadner(pos, neg):
@@ -44,6 +45,7 @@ def sentiment_analysis(df, wordlist):
     df['PositiveWords'] = word_counter(pos_words, df['Text'])
     df['NegativeWords'] = word_counter(neg_words, df['Text'])
     df['Sentiment'] = janis_fadner(df['PositiveWords'], df['NegativeWords'])
+
     
     return df
 
@@ -62,7 +64,7 @@ def clean_doc(doc):
         body = doc
         header = ''
         cleaned = 0
-    
+
     # Try getting the date
     try:
         dateresult = re.findall(r'\n\s{5}.*\d+.*\d{4}\s', header, flags=re.IGNORECASE)
@@ -72,19 +74,21 @@ def clean_doc(doc):
         date = dateresult[0].strip()
     except:
         date = ''
-    
+
     # Clean text body
     # words = nltk.word_tokenize(body) # Tokenize words
     words = body.split()
     words = [w.lower() for w in words] # Lowercase everything
     words = list(set(words)) # Unique words only
     words = [w for w in words if w.isalpha()] # Letters only
-    text = ' '.join(words)
-    
+    nb_words = len(words)
+    words = ' '.join(words) 
+
     # Collect results
     cleaned_doc = { 
-        'Text': text,
-        'Date': date
+        'Text': words,
+        'Date': date,
+        'UniqueWords': nb_words
     }
     
     return cleaned_doc
@@ -100,7 +104,7 @@ def folder_import(path):
     # Loop through files in folder
     for i, f in enumerate(files):
         # Read file
-        fp = io.open(os.path.join(path, f), 'r', encoding='windows-1252').read()
+        fp = io.open(os.path.join(path, f), 'r', encoding='latin1').read()
         # Clean file
         fp_clean = clean_doc(fp)
         # Add file name to results
