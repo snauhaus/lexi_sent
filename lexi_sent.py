@@ -94,7 +94,7 @@ def clean_doc(doc):
     return cleaned_doc
 
 
-def folder_import(path):
+def folder_import(path, verbose):
     """Function imports each document in path, cleans it, and appends to a data frame"""
     files = os.listdir(path)
     # Text files only
@@ -103,6 +103,9 @@ def folder_import(path):
     df = pd.DataFrame()
     # Loop through files in folder
     for i, f in enumerate(files):
+        # Verbose output if requested
+        if verbose:
+            print(f)
         # Read file
         fp = io.open(os.path.join(path, f), 'r', encoding='latin1').read()
         # Clean file
@@ -121,14 +124,14 @@ def main():
     group = parser.add_mutually_exclusive_group(required=False)
     group.add_argument('-w','--wordlist', help='CSV file containing a word list with positive and negative words. Default is the MPQA word list, which ships with this script. Different files must follow the same format.', required=False, nargs=1, default='MPQA.csv') #
     group.add_argument('-o','--output', help='Name for output file. Defaults to "Sentiments.xslx"', required=False, nargs=1, default='Sentiments.xlsx') #
+    group.add_argument('-v','--verbose', help='Print output for each file', required=False, action="store_true", default=False) #
    
     # Parse arguments
     args = vars(parser.parse_args())
     input_arg = args['input'][0]
-    if args['wordlist'] is not None:
-        wordlist_file = args['wordlist']
-    if args['output'] is not None:
-        output_file = args['output']
+    wordlist_file = args['wordlist']
+    output_file = args['output']
+    verbose = args['verbose']
         
     # Download nltk's punkt if missing
     # try:
@@ -140,7 +143,7 @@ def main():
     if input_arg.split(".")[-1]=="csv": # Check if input is csv file
         text_data = pd.read_csv(input_arg, names=["Text"], encoding='latin1')
     elif os.path.isdir(input_arg): # Check if input is a folder
-        text_data = folder_import(input_arg)
+        text_data = folder_import(input_arg, verbose)
     else:
         raise ValueError("input should be path to a folder or csv file")
         
