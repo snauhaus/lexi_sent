@@ -8,17 +8,17 @@ The program runs from the command line. Input can be a csv file or a folder.
 
 To see the program help:
 
-		python3 lexi_sent.py --help 
+	python3 lexi_sent.py --help 
 
 For CSV import, run the following commands:
 
-		python3 lexi_sent.py test.csv 
+	python3 lexi_sent.py test.csv 
 
 The input should be a CSV file with a single unnamed column, containing a document per row (see test.csv). 
 
 The folder import expects the input to be a folder. Only `txt` files can be imported. Example call:
 
-		python3 lexi_sent.py test
+	python3 lexi_sent.py test
 		
 Optional arguments: 
 
@@ -31,8 +31,7 @@ Optional arguments:
 
 If you're getting the error "ImportError: No module named ...", install the missing package(s):
 
-    # Run the following command to install dependencies
-		pip3 install pandas numpy openpyxl
+	pip3 install pandas numpy openpyxl
 		
 ### How to install Python?
 
