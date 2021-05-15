@@ -24,6 +24,8 @@ Optional arguments:
 
  - `-o` to specify a custom output file (defaults to 'Sentiments.csv')
  - `-w` to specify a custom wordlist. Defaults to 'MPQA.csv'. Custom wordlists need to be in the same format as the default wordlist. 
+ - `-v` prints name of each file during folder import, for tracing of encoding or other issues. 
+
 
 ## FAQ
 
