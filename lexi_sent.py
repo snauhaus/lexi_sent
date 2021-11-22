@@ -127,11 +127,11 @@ def main():
     group.add_argument('-v','--verbose', help='Print output for each file', required=False, action="store_true", default=False) #
    
     # Parse arguments
-    args = vars(parser.parse_args())
-    input_arg = args['input'][0]
-    wordlist_file = args['wordlist']
-    output_file = args['output']
-    verbose = args['verbose']
+    args = parser.parse_args()
+    input_arg = args.input
+    wordlist_file = args.wordlist
+    output_file = args.output
+    verbose = args.verbose
         
     # Download nltk's punkt if missing
     # try:
@@ -141,7 +141,7 @@ def main():
     
     # Import text data
     if input_arg.split(".")[-1]=="csv": # Check if input is csv file
-        text_data = pd.read_csv(input_arg, names=["Text"], encoding='latin1')
+        text_data = pd.read_csv(input_arg, names=["Text"], encoding='utf8')
     elif os.path.isdir(input_arg): # Check if input is a folder
         text_data = folder_import(input_arg, verbose)
     else:
